@@ -1,0 +1,36 @@
+<h1>Order Confirmation</h1>
+<p>Contact number: {{ result.number }}</p>
+<p>Name: {{ result.name }}</p>
+<p>DOB: {{ result.dob | date }}</p>
+<p>Order Date: {{ result.orderDate | date }}</p>
+<p>Order Units: {{ result.orderUnit }}</p>
+<p>Gender: {{ result.gender }}</p>
+<div *ngIf="result.url; else address">
+  <p>Paynow/Paylah address:</p>
+  <p>{{ result.url }}</p>
+</div>
+<ng-template #address>
+  <p>You BTC wallet address:</p>
+  <p>{{ result.address }}</p>
+</ng-template>
+<div *ngIf="result.orderType === 'sell'; else buy">
+  <h2>Custodian BTC address:</h2>
+  <p>bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq</p>
+  <p>
+    once the BTC are wire across we will send you the SGD funds to your
+    Paynow/Paylah bank account
+  </p>
+</div>
+<ng-template #buy>
+  <h2>Custodian’s Paynow/Paylah QR Code</h2>
+  <img
+    src="https://www.dbs.com.sg/iwov-resources/media/images/deposits/payments-and-transfers/scan-and-pay/qr-paynow.jpg"
+    alt=""
+  />
+  <p>
+    once the SGD funds are wire across we will send you the bitcoin to your
+    wallet address
+  </p>
+</ng-template>
+<p>Bitcoin Price: ${{price}}</p>
+<p>Amount: ${{amount}}</p>

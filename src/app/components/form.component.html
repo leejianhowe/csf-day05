@@ -1,0 +1,142 @@
+<h1>Bitcoin Order Sheet</h1>
+<!-- {{ diagnostic }} -->
+<form (ngSubmit)="onSubmit(form)" #form="ngForm">
+  <div>
+    <input
+      name="number"
+      type="text"
+      placeholder="Contact No."
+      ngModel
+      required
+      minlength="8"
+      maxlength="8"
+      #number="ngModel"
+      pattern="^[0-9]+$"
+    />
+    <div
+      class="warning"
+      *ngIf="number.invalid && (number.dirty || number.touched)"
+    >
+      <div *ngIf="number.errors.required">Contact number is required</div>
+      <div *ngIf="number.errors.minlength">Length must be 8</div>
+      <div *ngIf="number.errors.pattern">Numbers only</div>
+    </div>
+  </div>
+  <div>
+    <input
+      name="name"
+      type="text"
+      #name="ngModel"
+      placeholder="Name"
+      ngModel
+      required
+    />
+    <div class="warning" *ngIf="name.invalid && (name.dirty || name.touched)">
+      <div *ngIf="name.errors.required">Name is required</div>
+    </div>
+  </div>
+  <div>
+    <label
+      >Gender: <input ngModel type="radio" name="gender" value="male" />Male
+      <input ngModel type="radio" name="gender" value="female" />Female
+    </label>
+  </div>
+  <div>
+    <label
+      >Date of birth:
+      <input
+        name="dob"
+        type="date"
+        [(ngModel)]="defaults.dob"
+        required
+        checkDate
+        [max]="maxDate"
+        #dob="ngModel"
+      />
+      <div class="warning" *ngIf="dob.invalid && (dob.dirty || dob.touched)">
+        <div *ngIf="dob.errors.required">Date of Birth is required</div>
+        <div *ngIf="dob.errors.checkDate">At least 21</div>
+      </div>
+    </label>
+  </div>
+  <div>
+    <label
+      >Order Date:
+      <input
+        name="orderDate"
+        type="date"
+        ngModel
+        required
+        #orderDate="ngModel"
+      />
+    </label>
+    <div
+      class="warning"
+      *ngIf="orderDate.invalid && (orderDate.dirty || orderDate.touched)"
+    >
+      <div *ngIf="orderDate.errors.required">Order Date Required!</div>
+    </div>
+  </div>
+  <div>
+    <label
+      >Order Type:
+      <select name="orderType" ngModel required #orderType="ngModel">
+        <option value="buy">Buy</option>
+        <option value="sell">Sell</option>
+      </select>
+    </label>
+    <div
+      class="warning"
+      *ngIf="orderType.invalid && (orderType.touched || orderType.dirty)"
+    >
+      <div *ngIf="orderType.errors.required">Order type Required!</div>
+    </div>
+  </div>
+  <div>
+    <label
+      >Order Unit:
+      <input
+        name="orderUnit"
+        type="text"
+        #orderUnit="ngModel"
+        [(ngModel)]="defaults.orderUnit"
+        required
+        pattern="[+-]?([0-9]*[.])?[0-9]+"
+        (change)="updateAmount()"
+      />
+    </label>
+    <div
+      class="warning"
+      *ngIf="orderUnit.invalid && (orderUnit.touched || orderUnit.dirty)"
+    >
+      <div *ngIf="orderUnit.errors.required">Order Unit is required</div>
+      <div *ngIf="orderUnit.errors.pattern">Order must be numbers</div>
+    </div>
+  </div>
+  <hr />
+  <div>
+    <label>Crypto Pair: {{ defaults.cryptoName }}</label>
+  </div>
+  <div>
+    <label>Cryptio Defaults: {{ defaults.displayPrice }}</label>
+  </div>
+  <div *ngIf="orderType.value === 'sell'">
+    <label
+      >PayNow/PayLah Url
+      <input name="url" type="text" ngModel required />
+    </label>
+  </div>
+  <div *ngIf="orderType.value === 'buy'">
+    <label
+      >Bitcoin Wallet Address
+      <input name="address" type="text" ngModel required />
+    </label>
+  </div>
+  <div *ngIf="orderUnit.value">
+    <label>Amount in SGD: {{ amount }}</label>
+  </div>
+  <div>
+    <button type="submit" [disabled]="!form.valid">Order</button>
+    <button type="button" (click)="onReset(form)">Reset</button>
+  </div>
+</form>
